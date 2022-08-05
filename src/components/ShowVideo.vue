@@ -7,7 +7,7 @@
         <img class="iframeStyle" :src="video.big_poster" alt=""
          @mouseover="isHovered=true"
          />
-        <p :class="{kimia:isHovered}">
+        <p :class="{zIndex:isHovered}">
           {{ video.username }}
         </p>
       </div>
@@ -53,7 +53,7 @@ p {
   color: white;
   z-index: -1;
 }
-.kimia{
+.zIndex{
   z-index: 2 !important;
 }
 </style>
