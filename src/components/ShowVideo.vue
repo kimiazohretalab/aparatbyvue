@@ -1,15 +1,16 @@
 <template>
   <div class="show mx-auto h-screen flex flex-wrap justify-around items-center">
     <div id="videoWrapper">
-      <div class="divStyle" v-for="video in videos" :key="video.id"
-      @mouseleave="isHovered=false"
+      <div
+        class="divStyle"
+        v-for="video in videos"
+        :key="video.id"
+        @mouseout="offHover = false"
+        @mouseover="onHover(video.id)"
+        :class="{ bg: isHovered }"
       >
-        <img class="iframeStyle" :src="video.big_poster" alt=""
-         @mouseover="isHovered=true"
-         />
-        <p :class="{kimia:isHovered}">
-          {{ video.username }}
-        </p>
+        <img class="iframeStyle" :src="video.big_poster" alt="" />
+        <p v-text="video.username"></p>
       </div>
     </div>
   </div>
@@ -20,7 +21,8 @@ export default {
   name: "showVideo",
   data() {
     return {
-      isHovered:false
+      isHovered: false,
+      info: "",
     };
   },
   props: {
@@ -29,13 +31,25 @@ export default {
     },
   },
   methods: {
+    onHover(p) {
+      this.info = "";
+      this.isHovered = true;
+      this.info = this.videos.findIndex((video) => {
+        return video.id == p;
+      });
+      document.getElementsByTagName("p")[this.info].setAttribute("class", "kimia");
+      document.getElementsByTagName("img")[this.info].setAttribute("class", "hidden");
+    },
+    offHover() {
+      document.getElementsByTagName("p")[this.info].removeAttribute("class", "kimia");
+      document.getElementsByTagName("img")[this.info].removeAttribute("class", "hidden");
+    },
   },
 };
 </script>
 <style>
 .divStyle {
   position: relative;
-  background-color: blue;
   width: 300px;
   height: 200px;
   margin: 20px;
@@ -53,7 +67,10 @@ p {
   color: white;
   z-index: -1;
 }
-.kimia{
+.kimia {
   z-index: 2 !important;
+}
+.bg {
+  background-color: black;
 }
 </style>
