@@ -1,5 +1,5 @@
 <template>
-  <div class="show mx-auto h-screen flex flex-wrap justify-around items-center">
+  <div class="show mx-auto h-screen flex flex-wrap flex-row justify-around items-center">
     <div id="videoWrapper">
       <div
         class="divStyle"
@@ -36,32 +36,33 @@ export default {
       this.info = this.videos.findIndex((video) => {
         return video.id == p;
       });
-      document.getElementsByTagName("p")[this.info].setAttribute("class", "kimia");
+      document.getElementsByTagName("p")[this.info].setAttribute("class", "zIndex");
       document.getElementsByTagName("img")[this.info].setAttribute("class", "hidden");
     },
     offHover(a) {
-            this.info = "";
+      this.info = "";
       this.isHovered = false;
       this.info = this.videos.findIndex((video) => {
         return video.id == a;
       });
-      document.getElementsByTagName("p")[this.info].removeAttribute("class", "kimia");
+      document.getElementsByTagName("p")[this.info].removeAttribute("class", "zIndex");
       document.getElementsByTagName("img")[this.info].removeAttribute("class", "hidden");
     },
   },
 };
 </script>
-<style>
+<style scoped>
 .divStyle {
   position: relative;
-  width: 300px;
-  height: 200px;
+  width: 350px;
+  height: 250px;
   margin: 20px;
 }
 .iframeStyle {
-  width: 300px;
-  height: 200px;
   z-index: 1;
+  width: 350px;
+  height: 250px;
+
 }
 p {
   position: absolute;
@@ -71,7 +72,7 @@ p {
   color: black;
   z-index: -1;
 }
-.kimia {
+.zIndex {
   z-index: 2 !important;
 }
 </style>
