@@ -5,9 +5,8 @@
         class="divStyle"
         v-for="video in videos"
         :key="video.id"
-        @mouseout="offHover = false"
+        @mouseout="offHover(video.id)"
         @mouseover="onHover(video.id)"
-        :class="{ bg: isHovered }"
       >
         <img class="iframeStyle" :src="video.big_poster" alt="" />
         <p v-text="video.username"></p>
@@ -40,7 +39,12 @@ export default {
       document.getElementsByTagName("p")[this.info].setAttribute("class", "kimia");
       document.getElementsByTagName("img")[this.info].setAttribute("class", "hidden");
     },
-    offHover() {
+    offHover(a) {
+            this.info = "";
+      this.isHovered = false;
+      this.info = this.videos.findIndex((video) => {
+        return video.id == a;
+      });
       document.getElementsByTagName("p")[this.info].removeAttribute("class", "kimia");
       document.getElementsByTagName("img")[this.info].removeAttribute("class", "hidden");
     },
@@ -64,13 +68,10 @@ p {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
+  color: black;
   z-index: -1;
 }
 .kimia {
   z-index: 2 !important;
-}
-.bg {
-  background-color: black;
 }
 </style>
