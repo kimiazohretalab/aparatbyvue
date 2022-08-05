@@ -1,20 +1,13 @@
 <template>
   <div class="show mx-auto h-screen flex flex-wrap justify-around items-center">
     <div id="videoWrapper">
-      <div
-        class="divStyle"
-        v-for="video in videos"
-        :key="video.id"
-        @mouseout="isHovered = false"
+      <div class="divStyle" v-for="video in videos" :key="video.id"
+      @mouseleave="isHovered=false"
       >
-        <img
-          class="iframeStyle"
-          :src="video.big_poster"
-          alt=""
-          :class="{ iframevideoStyle: isHovered }"
-          @mouseover="isHovered = true"
-        />
-        <p v-show="videoHoverHandler(video.id)"  :class="{ hidden: !isHovered }">
+        <img class="iframeStyle" :src="video.big_poster" alt=""
+         @mouseover="isHovered=true"
+         />
+        <p :class="{kimia:isHovered}">
           {{ video.username }}
         </p>
       </div>
@@ -27,7 +20,7 @@ export default {
   name: "showVideo",
   data() {
     return {
-      isHovered: false,
+      isHovered:false
     };
   },
   props: {
@@ -35,18 +28,13 @@ export default {
       type: Array,
     },
   },
-  methods:{
-    videoHoverHandler(k){
-      return k
-    }
-  }
+  methods: {
+  },
 };
 </script>
 <style>
 .divStyle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
   background-color: blue;
   width: 300px;
   height: 200px;
@@ -55,8 +43,17 @@ export default {
 .iframeStyle {
   width: 300px;
   height: 200px;
+  z-index: 1;
 }
-.iframevideoStyle:hover {
-  display: none;
+p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  z-index: -1;
+}
+.kimia{
+  z-index: 2 !important;
 }
 </style>
