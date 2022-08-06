@@ -1,27 +1,49 @@
 <template>
-  <div class="show mx-auto h-screen flex flex-wrap flex-row justify-around items-center">
-    <div id="videoWrapper">
-      <div
-        class="divStyle"
-        v-for="video in videos"
-        :key="video.id"
-        @mouseout="offHover(video.id)"
-        @mouseover="onHover(video.id)"
-      >
-        <img class="iframeStyle" :src="video.big_poster" alt="" />
-        <p v-text="video.username"></p>
+  <div>
+    <div
+      class="show mx-auto h-screen flex flex-wrap flex-row justify-around items-center"
+    >
+      <div id="videoWrapper">
+        <div
+          class="divStyle"
+          v-for="video in videos"
+          :key="video.id"
+          @mouseout="offHover"
+          @click="modalShow(video.id)"
+        >
+          <img
+            class="iframeStyle"
+            :src="video.big_poster"
+            alt=""
+            @mouseover="onHover(video.id)"
+            v-if="hoveredVideoId !== video.id"
+          />
+          <p v-if="hoveredVideoId === video.id">{{ video.username }}</p>
+        </div>
       </div>
     </div>
+    <video-modal
+      v-show="isModal"
+      :isModal="isModal"
+      :clickedVideoId="clickedVideoId"
+      @modal-click="changeIsModal"
+      :videos="videos"
+    ></video-modal>
   </div>
 </template>
 
 <script>
+import VideoModal from "./VideoModal.vue";
 export default {
   name: "showVideo",
+  components: {
+    VideoModal,
+  },
   data() {
     return {
-      isHovered: false,
-      info: "",
+      hoveredVideoId: "",
+      isModal: false,
+      clickedVideoId: "",
     };
   },
   props: {
@@ -30,39 +52,35 @@ export default {
     },
   },
   methods: {
-    onHover(p) {
-      this.info = "";
-      this.isHovered = true;
-      this.info = this.videos.findIndex((video) => {
-        return video.id == p;
-      });
-      document.getElementsByTagName("p")[this.info].setAttribute("class", "zIndex");
-      document.getElementsByTagName("img")[this.info].setAttribute("class", "hidden");
+    onHover(videoId) {
+      this.hoveredVideoId = videoId;
+      console.log("hoveredVideoId", this.hoveredVideoId);
     },
-    offHover(a) {
-      this.info = "";
-      this.isHovered = false;
-      this.info = this.videos.findIndex((video) => {
-        return video.id == a;
-      });
-      document.getElementsByTagName("p")[this.info].removeAttribute("class", "zIndex");
-      document.getElementsByTagName("img")[this.info].removeAttribute("class", "hidden");
+    offHover() {
+      this.hoveredVideoId = "";
+      console.log("this.hoveredVideoId", this.hoveredVideoId);
     },
+    modalShow(p) {
+      this.clickedVideoId = p;
+      this.isModal = true;
+    },
+    changeIsModal(){
+      this.isModal=false
+    }
   },
 };
 </script>
 <style scoped>
 .divStyle {
   position: relative;
-  width: 350px;
-  height: 250px;
+  width: 400px;
+  height: 300px;
   margin: 20px;
 }
 .iframeStyle {
   z-index: 1;
   width: 350px;
   height: 250px;
-
 }
 p {
   position: absolute;
@@ -70,7 +88,9 @@ p {
   left: 50%;
   transform: translate(-50%, -50%);
   color: black;
-  z-index: -1;
+  background: white;
+  font-size: 2rem;
+  z-index: 0;
 }
 .zIndex {
   z-index: 2 !important;

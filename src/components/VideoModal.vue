@@ -1,0 +1,76 @@
+<template>
+  <div
+    ref="videoModal"
+    class="modal hidden fixed z-10 top-0 left-0 w-full h-full overflow-auto"
+    @click="modalClicked"
+  >
+    <div
+      class="modal-content bg-amber-200 dark:bg-rose-400 h-96 rounded flex justify-between flex-row flex-wrap relative w-4/5 p-6 border-2 dark:border-pink-900 border-amber-900"
+    >
+      <span
+        class="close dark:text-slate-200 hover:text-black no-underline cursor-pointer focus:text-black no-underline cursor-pointer absolute top-0 right-2.5 text-xl font-bold"
+        ref="close"
+        @click="closeHandler"
+        >&times;</span
+      >
+      <iframe ref="modalIframe" frameborder="10" allow="autoplay"></iframe>
+      <div>
+        <div>
+          <p ref="profileName" class="mt-6 dark:text-slate-200 text-right"></p>
+          <img alt="" id="profilePic" class="my-3 float-right" />
+        </div>
+        <p ref="visit" class="dark:text-slate-200 text-right clear-both">1</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+export default {
+  name: "videoModal",
+  data() {
+    return {
+      url: "",
+      profileArr: [],
+      currentVideo:[]
+    };
+  },
+  props: {
+    clickedVideoId: {
+      type: String,
+    },
+    videos: {
+      type: Array,
+    },
+    isModal: {
+      type: Boolean,
+    },
+  },
+  methods: {
+    closeHandler() {
+      this.$refs.videoModal.classList.add("hidden");
+    },
+    modalClicked(){
+       this.$emit("modal-click");
+    }
+  },
+  mounted(){
+    console.log('mounted');
+      this.$refs.videoModal.classList.remove("hidden");
+      this.currentVideo.push(this.videos.filter((video)=>video.id==this.clickedVideoId));
+      console.log(this.currentVideo);
+      this.url = this.currentVideo.url
+      axios
+        .get(`https://www.aparat.com/etc/api/profile/username/${this.currentVideo.username}`)
+        .then((res) => {
+          console.log(res);
+          this.profileArr = res;
+        });
+      this.currentVideo = [];
+  },
+  emits: ["modal-click"],
+};
+</script>
+
+<style></style>
