@@ -9,7 +9,7 @@
           v-for="video in videos"
           :key="video.id"
           @mouseout="offHover"
-          @click="modalShow(video.id)"
+          @click="modalShow(video)"
         >
           <img
             class="iframeStyle"
@@ -26,6 +26,7 @@
       v-show="isModal"
       :isModal="isModal"
       :clickedVideoId="clickedVideoId"
+      :profileArr="prfileArr"
       @modal-click="changeIsModal"
       :videos="videos"
     ></video-modal>
@@ -33,6 +34,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import VideoModal from "./VideoModal.vue";
 export default {
   name: "showVideo",
@@ -44,6 +46,7 @@ export default {
       hoveredVideoId: "",
       isModal: false,
       clickedVideoId: "",
+      profileArr: [],
     };
   },
   props: {
@@ -61,12 +64,20 @@ export default {
       console.log("this.hoveredVideoId", this.hoveredVideoId);
     },
     modalShow(p) {
-      this.clickedVideoId = p;
+      this.clickedVideoId = p.id;
       this.isModal = true;
+      axios
+        .get(
+          `https://www.aparat.com/etc/api/profile/username/${p.username}`
+        )
+        .then((res) => {
+          console.log(res);
+          this.profileArr = res;
+        });
     },
-    changeIsModal(){
-      this.isModal=false
-    }
+    changeIsModal() {
+      this.isModal = false;
+    },
   },
 };
 </script>

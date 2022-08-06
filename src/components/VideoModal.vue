@@ -26,14 +26,11 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   name: "videoModal",
   data() {
     return {
       url: "",
-      profileArr: [],
-      currentVideo:[]
     };
   },
   props: {
@@ -54,20 +51,6 @@ export default {
     modalClicked(){
        this.$emit("modal-click");
     }
-  },
-  mounted(){
-    console.log('mounted');
-      this.$refs.videoModal.classList.remove("hidden");
-      this.currentVideo.push(this.videos.filter((video)=>video.id==this.clickedVideoId));
-      console.log(this.currentVideo);
-      this.url = this.currentVideo.url
-      axios
-        .get(`https://www.aparat.com/etc/api/profile/username/${this.currentVideo.username}`)
-        .then((res) => {
-          console.log(res);
-          this.profileArr = res;
-        });
-      this.currentVideo = [];
   },
   emits: ["modal-click"],
 };
