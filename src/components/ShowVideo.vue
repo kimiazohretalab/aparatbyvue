@@ -26,7 +26,7 @@
       v-show="isModal"
       :isModal="isModal"
       :clickedVideoId="clickedVideoId"
-      :profileArr="prfileArr"
+      :profileArr="profileArr"
       @modal-click="changeIsModal"
       :videos="videos"
     ></video-modal>
@@ -46,7 +46,7 @@ export default {
       hoveredVideoId: "",
       isModal: false,
       clickedVideoId: "",
-      profileArr: [],
+      profileArr: {},
     };
   },
   props: {

@@ -1,7 +1,7 @@
 <template>
   <div
     ref="videoModal"
-    class="modal hidden fixed z-10 top-0 left-0 w-full h-full overflow-auto"
+    class="modal fixed z-10 top-0 left-0 w-full h-full overflow-auto"
     @click="modalClicked"
   >
     <div
@@ -16,8 +16,11 @@
       <iframe ref="modalIframe" frameborder="10" allow="autoplay"></iframe>
       <div>
         <div>
-          <p ref="profileName" class="mt-6 dark:text-slate-200 text-right"></p>
-          <img alt="" id="profilePic" class="my-3 float-right" />
+          <p ref="profileName" class="mt-6 dark:text-slate-200 text-right"
+           >{{this.profileArr.data.profile.name}}</p>
+          <img alt="" id="profilePic" class="my-3 float-right"
+          :src="this.profileArr.data.profile.pic_m"
+            />
         </div>
         <p ref="visit" class="dark:text-slate-200 text-right clear-both">1</p>
       </div>
@@ -30,7 +33,7 @@ export default {
   name: "videoModal",
   data() {
     return {
-      url: "",
+      
     };
   },
   props: {
@@ -42,6 +45,9 @@ export default {
     },
     isModal: {
       type: Boolean,
+    },
+    profileArr: {
+      type: Object,
     },
   },
   methods: {
