@@ -13,7 +13,7 @@
         @click="closeHandler"
         >&times;</span
       >
-      <iframe ref="modalIframe" frameborder="10" allow="autoplay"></iframe>
+      <iframe :src="this.url" ref="modalIframe" frameborder="10" allow="autoplay"></iframe>
       <div>
         <div>
           <p ref="profileName" class="mt-6 dark:text-slate-200 text-right"
@@ -49,6 +49,9 @@ export default {
     profileArr: {
       type: Object,
     },
+    url:{
+      type: String,
+    }
   },
   methods: {
     closeHandler() {

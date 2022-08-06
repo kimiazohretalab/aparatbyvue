@@ -27,6 +27,7 @@
       :isModal="isModal"
       :clickedVideoId="clickedVideoId"
       :profileArr="profileArr"
+      :url="url"
       @modal-click="changeIsModal"
       :videos="videos"
     ></video-modal>
@@ -47,6 +48,7 @@ export default {
       isModal: false,
       clickedVideoId: "",
       profileArr: {},
+      url:''
     };
   },
   props: {
@@ -65,6 +67,7 @@ export default {
     },
     modalShow(p) {
       this.clickedVideoId = p.id;
+      this.url=p.frame
       this.isModal = true;
       axios
         .get(
