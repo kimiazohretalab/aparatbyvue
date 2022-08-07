@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div
-      class="show"
-    >
-      <div id="videoWrapper">
+      <div id="videoWrapper" class="flex flex-wrap flex-row">
         <div
           class="divStyle"
           v-for="video in videos"
@@ -21,17 +18,15 @@
           <p v-if="hoveredVideoId === video.id">{{ video.username }}</p>
         </div>
       </div>
-    </div>
     <video-modal
       v-show="isModal"
-      :isModal="isModal"
-      :clickedVideoId="clickedVideoId"
       :profileArr="profileArr"
       :url="url"
       @modal-click="changeIsModal"
       :videos="videos"
       :videoViews="videoViews"
       :index="index"
+      :doseVideoExist="doseVideoExist"
     ></video-modal>
   </div>
 </template>
@@ -48,12 +43,11 @@ export default {
     return {
       hoveredVideoId: "",
       isModal: false,
-      clickedVideoId: "",
       profileArr: {},
       url: "",
       videoViews: [],
-      index: "",
-      doseVideoExist: false,
+      index: 0,
+      doseVideoExist: '',
     };
   },
   props: {
@@ -71,21 +65,21 @@ export default {
       console.log("this.hoveredVideoId", this.hoveredVideoId);
     },
     modalShow(p) {
-      this.clickedVideoId = p.id;
       this.url = p.frame;
+      console.log(this.url);
       this.isModal = true;
       axios
         .get(`https://www.aparat.com/etc/api/profile/username/${p.username}`)
         .then((res) => {
-          console.log(res);
           this.profileArr = res;
+          console.log(this.profileArr);
         });
       this.videoViews = localStorage.getItem("count")
         ? JSON.parse(localStorage.getItem("count"))
         : [];
       this.index = this.videoViews.findIndex(
         (videoIndex) => videoIndex.id === p.id
-      );
+      )
       this.doseVideoExist = this.videoViews.some((view) => view.id === p.id);
       if (this.doseVideoExist == false) {
         this.videoViews.push({ id: p.id, count: 1 });
@@ -104,8 +98,8 @@ export default {
 <style scoped>
 .divStyle {
   position: relative;
-  width: 400px;
-  height: 300px;
+  width: 350px !important;
+  height: 250px;
   margin: 20px;
 }
 .imageStyle {
