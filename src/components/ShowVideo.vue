@@ -12,7 +12,7 @@
           @click="modalShow(video)"
         >
           <img
-            class="iframeStyle"
+            class="imageStyle"
             :src="video.big_poster"
             alt=""
             @mouseover="onHover(video.id)"
@@ -48,8 +48,10 @@ export default {
       isModal: false,
       clickedVideoId: "",
       profileArr: {},
-      url:'',
-      
+      url: "",
+      videoViews: [],
+      index: "",
+      doseVideoExist: false,
     };
   },
   props: {
@@ -68,17 +70,28 @@ export default {
     },
     modalShow(p) {
       this.clickedVideoId = p.id;
-      this.url=p.frame
+      this.url = p.frame;
       this.isModal = true;
       axios
-        .get(
-          `https://www.aparat.com/etc/api/profile/username/${p.username}`
-        )
+        .get(`https://www.aparat.com/etc/api/profile/username/${p.username}`)
         .then((res) => {
           console.log(res);
           this.profileArr = res;
-        })
-      
+        });
+      this.videoViews = localStorage.getItem("count")
+        ? JSON.parse(localStorage.getItem("count"))
+        : [];
+      this.index = this.videoViews.findIndex(
+        (videoIndex) => videoIndex.id === p.id
+      );
+      this.doseVideoExist = this.videoViews.some((view) => view.id === p.id);
+      if (this.doseVideoExist == false) {
+        this.videoViews.push({ id: p.id, count: 1 });
+      } else {
+        this.videoViews[this.index].count =
+          this.videoViews[this.index].count + 1;
+      }
+      localStorage.setItem("count", JSON.stringify(this.videoViews));
     },
     changeIsModal() {
       this.isModal = false;
@@ -93,7 +106,7 @@ export default {
   height: 300px;
   margin: 20px;
 }
-.iframeStyle {
+.imageStyle {
   z-index: 1;
   width: 350px;
   height: 250px;
