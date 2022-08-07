@@ -5,7 +5,7 @@
     @click="modalClicked"
   >
     <div
-      class="modal-content bg-amber-200 dark:bg-rose-400 h-96 rounded flex justify-between flex-row flex-wrap relative w-4/5 p-6 border-2 dark:border-pink-900 border-amber-900"
+      class="modal-content bg-white dark:bg-rose-400 h-96 rounded flex justify-between flex-row flex-wrap relative w-4/5 p-6 border-2 dark:border-pink-900 border-amber-900"
     >
       <span
         class="close dark:text-slate-200 hover:text-black no-underline cursor-pointer focus:text-black no-underline cursor-pointer absolute top-0 right-2.5 text-xl font-bold"
@@ -22,8 +22,10 @@
           :src="this.profileArr.data.profile.pic_m"
             />
         </div>
-        <p ref="visit" class="dark:text-slate-200 text-right clear-both">
+        <p v-if="doseVideoExist" ref="visit" class="dark:text-slate-200 text-right clear-both">
           number of views:{{this.videoViews[this.index].count}}</p>
+          <p v-else ref="visit" class="dark:text-slate-200 text-right clear-both">
+          number of views:1</p>
       </div>
     </div>
   </div>
@@ -44,9 +46,6 @@ export default {
     videos: {
       type: Array,
     },
-    isModal: {
-      type: Boolean,
-    },
     profileArr: {
       type: Object,
     },
@@ -58,6 +57,9 @@ export default {
     },
     videoViews:{
       type:Array
+    },
+    doseVideoExist:{
+      type:Boolean
     }
   },
   methods: {
