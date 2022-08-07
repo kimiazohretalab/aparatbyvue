@@ -48,7 +48,8 @@ export default {
       isModal: false,
       clickedVideoId: "",
       profileArr: {},
-      url:''
+      url:'',
+      
     };
   },
   props: {
@@ -76,7 +77,8 @@ export default {
         .then((res) => {
           console.log(res);
           this.profileArr = res;
-        });
+        })
+      
     },
     changeIsModal() {
       this.isModal = false;
