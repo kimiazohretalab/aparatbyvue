@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="show mx-auto h-screen flex flex-wrap flex-row justify-around items-center"
+      class="show"
     >
       <div id="videoWrapper">
         <div
@@ -30,6 +30,8 @@
       :url="url"
       @modal-click="changeIsModal"
       :videos="videos"
+      :videoViews="videoViews"
+      :index="index"
     ></video-modal>
   </div>
 </template>

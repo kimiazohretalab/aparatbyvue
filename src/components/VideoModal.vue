@@ -22,7 +22,8 @@
           :src="this.profileArr.data.profile.pic_m"
             />
         </div>
-        <p ref="visit" class="dark:text-slate-200 text-right clear-both">1</p>
+        <p ref="visit" class="dark:text-slate-200 text-right clear-both">
+          number of views:{{this.videoViews[this.index].count}}</p>
       </div>
     </div>
   </div>
@@ -51,6 +52,12 @@ export default {
     },
     url:{
       type: String,
+    },
+    index:{
+      type:Number
+    },
+    videoViews:{
+      type:Array
     }
   },
   methods: {
