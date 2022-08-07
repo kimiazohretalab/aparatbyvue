@@ -1,7 +1,7 @@
 <template>
   <div
     ref="videoModal"
-    class="modal fixed z-10 top-0 left-0 w-full h-full overflow-auto"
+    class="modal fixed z-10 top-0 left-0 w-full h-full overflow-auto flex justify-center items-center"
     @click="modalClicked"
   >
     <div
@@ -13,19 +13,34 @@
         @click="closeHandler"
         >&times;</span
       >
-      <iframe :src="this.url" ref="modalIframe" frameborder="10" allow="autoplay"></iframe>
+      <iframe
+        :src="this.url"
+        ref="modalIframe"
+        frameborder="10"
+        allow="autoplay"
+      ></iframe>
       <div>
         <div>
-          <p ref="profileName" class="mt-6 dark:text-slate-200 text-right"
-           >{{this.profileArr.data.profile.name}}</p>
-          <img alt="" id="profilePic" class="my-3 float-right"
-          :src="this.profileArr.data.profile.pic_m"
-            />
+          <p ref="profileName" class="mt-6 dark:text-slate-200 text-right">
+            {{ this.profileArr.data.profile.name }}
+          </p>
+          <img
+            alt=""
+            id="profilePic"
+            class="my-3 float-right"
+            :src="this.profileArr.data.profile.pic_m"
+          />
         </div>
-        <p v-if="doseVideoExist" ref="visit" class="dark:text-slate-200 text-right clear-both">
-          number of views:{{this.videoViews[this.index].count}}</p>
-          <p v-else ref="visit" class="dark:text-slate-200 text-right clear-both">
-          number of views:1</p>
+        <p
+          v-if="doseVideoExist"
+          ref="visit"
+          class="dark:text-slate-200 text-right clear-both"
+        >
+          number of views:{{ this.videoViews[this.index].count }}
+        </p>
+        <p v-else ref="visit" class="dark:text-slate-200 text-right clear-both">
+          number of views:1
+        </p>
       </div>
     </div>
   </div>
@@ -35,9 +50,7 @@
 export default {
   name: "videoModal",
   data() {
-    return {
-      
-    };
+    return {};
   },
   props: {
     clickedVideoId: {
@@ -49,26 +62,26 @@ export default {
     profileArr: {
       type: Object,
     },
-    url:{
+    url: {
       type: String,
     },
-    index:{
-      type:Number
+    index: {
+      type: Number,
     },
-    videoViews:{
-      type:Array
+    videoViews: {
+      type: Array,
     },
-    doseVideoExist:{
-      type:Boolean
-    }
+    doseVideoExist: {
+      type: Boolean,
+    },
   },
   methods: {
     closeHandler() {
       this.$refs.videoModal.classList.add("hidden");
     },
-    modalClicked(){
-       this.$emit("modal-click");
-    }
+    modalClicked() {
+      this.$emit("modal-click");
+    },
   },
   emits: ["modal-click"],
 };
