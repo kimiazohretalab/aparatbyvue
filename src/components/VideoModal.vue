@@ -80,10 +80,11 @@ export default {
       this.$refs.videoModal.classList.add("hidden");
     },
     modalClicked() {
-      this.$emit("modal-click");
+      this.$store.dispatch("changeIsModalFalse")
+      // this.$emit("modal-click");
     },
   },
-  emits: ["modal-click"],
+  // emits: ["modal-click"],
 };
 </script>
 

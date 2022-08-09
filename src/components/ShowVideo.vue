@@ -19,10 +19,9 @@
         </div>
       </div>
     <video-modal
-      v-show="isModal"
+      v-show="$store.state.isModal"
       :profileArr="profileArr"
       :url="url"
-      @modal-click="changeIsModal"
       :videos="videos"
       :videoViews="videoViews"
       :index="index"
@@ -42,7 +41,7 @@ export default {
   data() {
     return {
       hoveredVideoId: "",
-      isModal: false,
+      // isModal: false,
       profileArr: {},
       url: "",
       videoViews: [],
@@ -67,7 +66,8 @@ export default {
     modalShow(p) {
       this.url = p.frame;
       console.log(this.url);
-      this.isModal = true;
+      // this.isModal = true;
+      this.$store.dispatch("changeIsModalTrue")
       axios
         .get(`https://www.aparat.com/etc/api/profile/username/${p.username}`)
         .then((res) => {
@@ -89,9 +89,9 @@ export default {
       }
       localStorage.setItem("count", JSON.stringify(this.videoViews));
     },
-    changeIsModal() {
-      this.isModal = false;
-    },
+    // changeIsModal() {
+    //   this.isModal = false;
+    // },
   },
 };
 </script>
