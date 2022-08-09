@@ -1,23 +1,25 @@
 <template>
   <div>
-      <div id="videoWrapper" class="flex flex-wrap flex-row">
-        <div
-          class="divStyle"
-          v-for="video in videos"
-          :key="video.id"
-          @mouseout="offHover"
-          @click="modalShow(video)"
-        >
-          <img
-            class="imageStyle"
-            :src="video.big_poster"
-            alt=""
-            @mouseover="onHover(video.id)"
-            v-if="hoveredVideoId !== video.id"
-          />
-          <p v-if="hoveredVideoId === video.id">{{ video.username }}</p>
-        </div>
+    <div id="videoWrapper" class="flex flex-wrap flex-row">
+      <div
+        class="divStyle"
+        v-for="video in videos"
+        :key="video.id"
+        @mouseout="offHover"
+        @click="modalShow(video)"
+      >
+        <img
+          class="imageStyle rounded-xl"
+          :src="video.big_poster"
+          alt=""
+          @mouseover="onHover(video.id)"
+          v-if="hoveredVideoId !== video.id"
+        />
+        <p v-if="hoveredVideoId === video.id" class="text-teal-700 text-2xl">
+          {{ video.username }}
+        </p>
       </div>
+    </div>
     <video-modal
       v-show="$store.state.isModal"
       :profileArr="profileArr"
@@ -26,6 +28,7 @@
       :videoViews="videoViews"
       :index="index"
       :doseVideoExist="doseVideoExist"
+      :similarVideos="similarVideos"
     ></video-modal>
   </div>
 </template>
@@ -40,13 +43,15 @@ export default {
   },
   data() {
     return {
+      similarVideos:[],
+      tag:'',
       hoveredVideoId: "",
       // isModal: false,
       profileArr: {},
       url: "",
       videoViews: [],
       index: 0,
-      doseVideoExist: '',
+      doseVideoExist: "",
     };
   },
   props: {
@@ -65,21 +70,31 @@ export default {
     },
     modalShow(p) {
       this.url = p.frame;
-      console.log(this.url);
+      this.uid= p.uid
       // this.isModal = true;
-      this.$store.dispatch("changeIsModalTrue")
+      this.$store.dispatch("changeIsModalTrue");
       axios
         .get(`https://www.aparat.com/etc/api/profile/username/${p.username}`)
         .then((res) => {
           this.profileArr = res;
-          console.log(this.profileArr);
+        });
+       axios
+        .get(`https://www.aparat.com/etc/api/video/videohash/${p.uid}`)
+        .then((res) => {
+          this.tag = res.data.video.tags[0].name;
+        });
+       axios
+        .get(`https://www.aparat.com/etc/api/videobytag/text/${this.tag}`)
+        .then((res) => {
+          this.similarVideos = res.data.videobytag;
+          console.log(this.similarVideos);
         });
       this.videoViews = localStorage.getItem("count")
         ? JSON.parse(localStorage.getItem("count"))
         : [];
       this.index = this.videoViews.findIndex(
         (videoIndex) => videoIndex.id === p.id
-      )
+      );
       this.doseVideoExist = this.videoViews.some((view) => view.id === p.id);
       if (this.doseVideoExist == false) {
         this.videoViews.push({ id: p.id, count: 1 });
@@ -112,9 +127,7 @@ p {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: black;
   background: white;
-  font-size: 2rem;
   z-index: 0;
 }
 .zIndex {

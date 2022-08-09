@@ -4,8 +4,20 @@
       <search-video :videos="videos" @video-urls="getUrls"></search-video>
       <show-video :videos="videos"></show-video>
     </div>
-    <button @click="nextHandler" class="p-5">next</button>
-    <button @click="prevHandler" class="p-5">prev</button>
+    <div v-show="isButton" class="flex justify-center">
+      <button
+        @click="prevHandler"
+        class="p-2 rounded-xl bg-teal-600 text-white mx-3"
+      >
+        previous page
+      </button>
+      <button
+        @click="nextHandler"
+        class="p-2 rounded-xl bg-teal-600 text-white mx-3"
+      >
+        next page
+      </button>
+    </div>
   </div>
 </template>
 <script>
@@ -21,6 +33,7 @@ export default {
   data() {
     return {
       videos: [],
+      isButton:false,
       // searchedText:'',
       skip: 1,
     };
@@ -36,6 +49,7 @@ export default {
         .then((res) => {
           this.videos = res.data.videobysearch;
           console.log(this.videos);
+          this.isButton=true
         });
     },
     nextHandler() {
