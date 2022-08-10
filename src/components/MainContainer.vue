@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       videos: [],
-      isButton:false,
+      isButton: false,
       // searchedText:'',
       skip: 1,
     };
@@ -49,7 +49,7 @@ export default {
         .then((res) => {
           this.videos = res.data.videobysearch;
           console.log(this.videos);
-          this.isButton=true
+          this.isButton = true;
         });
     },
     nextHandler() {

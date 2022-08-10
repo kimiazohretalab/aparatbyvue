@@ -1,12 +1,11 @@
 <template>
-  <main-container />
+  <div>
+    <router-view></router-view>
+  </div>
 </template>
 <script>
-import MainContainer from './components/MainContainer.vue';
 export default {
-  name:"app",
-  components:{
-    MainContainer,
-},
-}
+  name: "app",
+  components: {},
+};
 </script>

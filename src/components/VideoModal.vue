@@ -17,7 +17,7 @@
       <div class="flex justify-center items-center h-full	" v-if="isLoading">
         <loading />
       </div>
-      <div class="flex flex-wrap justify-between flex-row relative" v-else>
+      <div class="flex flex-wrap justify-between flex-row relative h-full" v-else>
         <iframe
           :src="this.url"
           ref="modalIframe"
