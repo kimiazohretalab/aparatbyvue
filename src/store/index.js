@@ -5,9 +5,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    isModal: false
+    isModal: false,
+    isLoading:false
   },
   getters: {
+    getIsLoading(state) { return state.isLoading; }
   },
   mutations: {
     isModalTrue(state){
@@ -15,6 +17,9 @@ export default new Vuex.Store({
     },
     isModalFalse(state){
       state.isModal = false
+    },
+    Loading(state,payload){
+      state.isLoading=payload
     }
   },
   actions: {
@@ -23,6 +28,9 @@ export default new Vuex.Store({
     },
     changeIsModalFalse(context){
       context.commit('isModalFalse')
+    },
+    LoadingAction(context,payload){
+      context.commit('Loading',payload)
     }
   },
   modules: {

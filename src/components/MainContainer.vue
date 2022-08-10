@@ -9,13 +9,13 @@
         @click="prevHandler"
         class="p-2 rounded-xl bg-teal-600 text-white mx-3"
       >
-        previous page
+        صفحه قبلی
       </button>
       <button
         @click="nextHandler"
         class="p-2 rounded-xl bg-teal-600 text-white mx-3"
       >
-        next page
+        صفحه بعدی
       </button>
     </div>
   </div>

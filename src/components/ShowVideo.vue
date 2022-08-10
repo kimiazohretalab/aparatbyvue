@@ -6,13 +6,13 @@
         v-for="video in videos"
         :key="video.id"
         @mouseout="offHover"
+        @mouseover="onHover(video.id)"
         @click="modalShow(video)"
       >
         <img
           class="imageStyle rounded-xl"
           :src="video.big_poster"
           alt=""
-          @mouseover="onHover(video.id)"
           v-if="hoveredVideoId !== video.id"
         />
         <p v-if="hoveredVideoId === video.id" class="text-teal-700 text-2xl">
@@ -21,21 +21,18 @@
       </div>
     </div>
     <video-modal
-      v-show="$store.state.isModal"
-      :profileArr="profileArr"
-      :url="url"
+      v-if="$store.state.isModal"
+      :video="video"
       :videos="videos"
-      :videoViews="videoViews"
-      :index="index"
-      :doseVideoExist="doseVideoExist"
-      :similarVideos="similarVideos"
-    ></video-modal>
+    >
+    </video-modal>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+
 import VideoModal from "./VideoModal.vue";
+
 export default {
   name: "showVideo",
   components: {
@@ -43,15 +40,8 @@ export default {
   },
   data() {
     return {
-      similarVideos:[],
-      tag:'',
+      video:{},
       hoveredVideoId: "",
-      // isModal: false,
-      profileArr: {},
-      url: "",
-      videoViews: [],
-      index: 0,
-      doseVideoExist: "",
     };
   },
   props: {
@@ -68,47 +58,12 @@ export default {
       this.hoveredVideoId = "";
       console.log("this.hoveredVideoId", this.hoveredVideoId);
     },
-    modalShow(p) {
-      this.url = p.frame;
-      this.uid= p.uid
-      // this.isModal = true;
+    modalShow(video) {
+      this.video=video
       this.$store.dispatch("changeIsModalTrue");
-      axios
-        .get(`https://www.aparat.com/etc/api/profile/username/${p.username}`)
-        .then((res) => {
-          this.profileArr = res;
-        });
-       axios
-        .get(`https://www.aparat.com/etc/api/video/videohash/${p.uid}`)
-        .then((res) => {
-          this.tag = res.data.video.tags[0].name;
-        });
-       axios
-        .get(`https://www.aparat.com/etc/api/videobytag/text/${this.tag}`)
-        .then((res) => {
-          this.similarVideos = res.data.videobytag;
-          console.log(this.similarVideos);
-        });
-      this.videoViews = localStorage.getItem("count")
-        ? JSON.parse(localStorage.getItem("count"))
-        : [];
-      this.index = this.videoViews.findIndex(
-        (videoIndex) => videoIndex.id === p.id
-      );
-      this.doseVideoExist = this.videoViews.some((view) => view.id === p.id);
-      if (this.doseVideoExist == false) {
-        this.videoViews.push({ id: p.id, count: 1 });
-      } else {
-        this.videoViews[this.index].count =
-          this.videoViews[this.index].count + 1;
-      }
-      localStorage.setItem("count", JSON.stringify(this.videoViews));
-    },
-    // changeIsModal() {
-    //   this.isModal = false;
-    // },
   },
-};
+}
+}
 </script>
 <style scoped>
 .divStyle {

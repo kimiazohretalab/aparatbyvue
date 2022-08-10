@@ -1,70 +1,91 @@
 <template>
   <div
     ref="videoModal"
-    class="modal bg-gray-900 bg-opacity-60 fixed z-10 top-0 left-0 w-full h-full overflow-auto flex justify-center items-center "
+    class="modal bg-gray-900 bg-opacity-60 fixed z-10 top-0 left-0 w-full h-full overflow-auto flex justify-center items-center"
     @click="modalClicked"
   >
     <div
-      class="modal-content bg-white dark:bg-rose-400 h-96 rounded flex
-      flex-wrap justify-between flex-row relative w-11/12	h-4/5	 p-6 border-2 border-slate-700"
+      v-if="this.doseVideoExist"
+      class="modal-content bg-white rounded-2xl relative w-11/12 h-4/5 p-6 border-2 border-slate-700"
     >
       <span
-        class="close dark:text-slate-200 hover:text-black no-underline cursor-pointer focus:text-black no-underline cursor-pointer absolute top-0 right-2.5 text-xl font-bold"
+        class="close dark:text-slate-200 hover:text-black focus:text-black no-underline cursor-pointer absolute top-0 right-2.5 text-xl font-bold"
         ref="close"
         @click="closeHandler"
         >&times;</span
       >
-      <iframe
-        :src="this.url"
-        ref="modalIframe"
-        frameborder="10"
-        allow="autoplay"
-        class="w-2/4"
-      ></iframe>
-      <div>
-        <p
-          ref="profileName"
-          class="mt-6 dark:text-slate-200 text-right text-amber-600"
-        >
-          UserName: "{{ this.profileArr.data.profile.name }}"
-        </p>
-        <p
-          v-if="doseVideoExist"
-          ref="visit"
-          class="dark:text-slate-200 text-right clear-both text-amber-600"
-        >
-          number of views:{{ this.videoViews[this.index].count }}
-        </p>
-        <p
-          v-else
-          ref="visit"
-          class="dark:text-slate-200 text-right clear-both text-amber-600"
-        >
-          number of views:1
-        </p>
+      <div class="flex justify-center items-center h-full	" v-if="isLoading">
+        <loading />
       </div>
-      <div>
-        <img
-          alt=""
-          id="profilePic"
-          class="my-3 float-right rounded-full"
-          :src="this.profileArr.data.profile.pic_m"
-        />
-      </div>
-      <div v-for="similarVideo in similarVideos.slice(0, 3)" 
-      :key="similarVideo.id"
-      class="mt-14">
-        <iframe :src="similarVideo.frame" frameborder="0"></iframe>
+      <div class="flex flex-wrap justify-between flex-row relative" v-else>
+        <iframe
+          :src="this.url"
+          ref="modalIframe"
+          frameborder="10"
+          allow="autoplay"
+          class="w-2/4"
+        ></iframe>
+        <div>
+          <p
+            v-if="this.doesProfileExist"
+            ref="profileName"
+            class="mt-6 dark:text-slate-200 text-right text-amber-600"
+          >
+            نام کاربری: "{{ this.profileArr.data.profile.name }}"
+          </p>
+          <p
+            ref="visit"
+            class="dark:text-slate-200 text-right clear-both text-amber-600"
+          >
+            تعداد بازدید ها:{{ this.videoViews[this.index].count }}
+          </p>
+        </div>
+        <div>
+          <img
+            v-if="this.doesProfileExist"
+            alt=""
+            id="profilePic"
+            class="my-3 float-right rounded-full"
+            :src="this.profileArr.data.profile.pic_m"
+          />
+        </div>
+        <br />
+        <div
+          v-for="similarVideo in similarVideos.slice(0, 3)"
+          :key="similarVideo.id"
+          class="mt-14"
+        >
+          <iframe
+            :src="similarVideo.frame"
+            frameborder="0"
+            style="width: 350px"
+          ></iframe>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Loading from "./LoadingSpinner.vue";
+import axios from "axios";
+import { mapGetters } from "vuex";
 export default {
   name: "videoModal",
+  components: {
+    Loading,
+  },
   data() {
-    return {};
+    return {
+      url: "",
+      videoViews: [],
+      index: 0,
+      doseVideoExist: false,
+      similarVideos: [],
+      tag: "",
+      profileArr: [],
+      doesProfileExist: false,
+    };
   },
   props: {
     clickedVideoId: {
@@ -73,35 +94,64 @@ export default {
     videos: {
       type: Array,
     },
-    profileArr: {
+    video: {
       type: Object,
-    },
-    url: {
-      type: String,
-    },
-    index: {
-      type: Number,
-    },
-    videoViews: {
-      type: Array,
-    },
-    doseVideoExist: {
-      type: Boolean,
-    },
-    similarVideos: {
-      type: Array,
     },
   },
   methods: {
     closeHandler() {
-      this.$refs.videoModal.classList.add("hidden");
+      this.$store.dispatch("changeIsModalFalse");
     },
     modalClicked() {
       this.$store.dispatch("changeIsModalFalse");
-      // this.$emit("modal-click");
     },
   },
-  // emits: ["modal-click"],
+  computed: {
+    ...mapGetters({ isLoading: "getIsLoading" }),
+  },
+  created() {
+    this.url = this.video.frame;
+    this.uid = this.video.uid;
+    this.$store.dispatch("LoadingAction", true);
+    this.$store.dispatch("changeIsModalTrue");
+    axios
+      .get(
+        `https://www.aparat.com/etc/api/profile/username/${this.video.username}`
+      )
+      .then((res) => {
+        this.profileArr = res;
+        this.doesProfileExist = true;
+      });
+    axios
+      .get(`https://www.aparat.com/etc/api/video/videohash/${this.video.uid}`)
+      .then((res) => {
+        console.log(res);
+        this.tag = res.data.video.tags[0].name
+          ? res.data.video.tags[0].name
+          : "";
+      });
+    axios
+      .get(`https://www.aparat.com/etc/api/videobytag/text/${this.tag}`)
+      .then((res) => {
+        this.similarVideos = res.data.videobytag;
+        this.$store.dispatch("LoadingAction", false);
+      });
+    this.videoViews = localStorage.getItem("count")
+      ? JSON.parse(localStorage.getItem("count"))
+      : [];
+    this.index = this.videoViews.findIndex(
+      (videoIndex) => videoIndex.id === this.video.id
+    );
+    this.doseVideoExist = this.videoViews.some(
+      (view) => view.id === this.video.id
+    );
+    if (this.doseVideoExist == false) {
+      this.videoViews.push({ id: this.video.id, count: 1 });
+    } else {
+      this.videoViews[this.index].count = this.videoViews[this.index].count + 1;
+    }
+    localStorage.setItem("count", JSON.stringify(this.videoViews));
+  },
 };
 </script>
 

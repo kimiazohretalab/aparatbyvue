@@ -2,7 +2,7 @@
   <div class="w-full flex justify-center mt-1">
     <input
       type="search"
-      placeholder="search here.."
+      placeholder="جست و جو کنید.."
       v-model="inputValue"
       class="bg-yellow-200 text-orange-900 p-2 rounded-xl focus:ring-2 
       focus:outline-none focus:ring-amber-500	w-6/12" 
@@ -11,7 +11,7 @@
       @click="getVideoHandler"
       class="p-2 rounded-xl bg-teal-600 text-white"
     >
-      search
+      جست و جو
     </button>
   </div>
 </template>
