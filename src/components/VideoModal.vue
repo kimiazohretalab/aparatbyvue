@@ -1,12 +1,12 @@
 <template>
   <div
     ref="videoModal"
-    class="modal bg-gray-900 bg-opacity-60 fixed z-10 top-0 left-0 w-full h-full overflow-auto flex justify-center items-center"
+    class="modal bg-gray-900 bg-opacity-60 fixed z-10 top-0 left-0 w-full h-full flex justify-center items-center"
     @click="modalClicked"
   >
     <div
       v-if="this.doseVideoExist"
-      class="modal-content bg-white rounded-2xl relative w-11/12 h-4/5 p-6 border-2 border-slate-700"
+      class="modal-content  overflow-y-scroll bg-white rounded-2xl h-full  w-11/12 sm:h-full md:h-4/5 p-6 border-2 border-slate-700"
     >
       <span
         class="close dark:text-slate-200 hover:text-black focus:text-black no-underline cursor-pointer absolute top-0 right-2.5 text-xl font-bold"
@@ -14,18 +14,21 @@
         @click="closeHandler"
         >&times;</span
       >
-      <div class="flex justify-center items-center h-full	" v-if="isLoading">
+      <div class="flex justify-center items-center h-full" v-if="isLoading">
         <loading />
       </div>
-      <div class="flex flex-wrap justify-between flex-row relative h-full" v-else>
+      <div
+        class="flex flex-wrap md:justify-between justify-center sm:justify-center flex-col sm:flex-col md:flex-row relative 	"
+        v-else
+      >
         <iframe
           :src="this.url"
           ref="modalIframe"
           frameborder="10"
           allow="autoplay"
-          class="w-2/4"
+          class="md:w-2/4 w-max self-center	"
         ></iframe>
-        <div>
+        <div class="w-max	self-center	">
           <p
             v-if="this.doesProfileExist"
             ref="profileName"
@@ -40,7 +43,7 @@
             تعداد بازدید ها:{{ this.videoViews[this.index].count }}
           </p>
         </div>
-        <div>
+        <div class="w-max self-center	">
           <img
             v-if="this.doesProfileExist"
             alt=""
@@ -53,7 +56,7 @@
         <div
           v-for="similarVideo in similarVideos.slice(0, 3)"
           :key="similarVideo.id"
-          class="mt-14"
+          class="mt-14 w-max	self-center	"
         >
           <iframe
             :src="similarVideo.frame"
@@ -126,9 +129,9 @@ export default {
       .get(`https://www.aparat.com/etc/api/video/videohash/${this.video.uid}`)
       .then((res) => {
         console.log(res);
-        this.tag = res.data.video.tags[0].name
-          ? res.data.video.tags[0].name
-          : "";
+        if (res) {
+          this.tag = res.data.video.tags[0].name;
+        }
       });
     axios
       .get(`https://www.aparat.com/etc/api/videobytag/text/${this.tag}`)

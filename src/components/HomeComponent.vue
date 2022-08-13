@@ -5,7 +5,7 @@
     </div>
     <div class="flex justify-center items-center mt-4">
       <router-link to="/Main" class="text-2xl text-emerald-800 block">
-        سرچ
+        برای ورود به سرچ کلیک کنید
       </router-link>
     </div>
   </div>
