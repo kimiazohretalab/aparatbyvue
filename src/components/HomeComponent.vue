@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="flex justify-center items-center">
+    <div class="center">
       <p class="text-2xl text-emerald-800">خوش امدید</p>
     </div>
-    <div class="flex justify-center items-center mt-4">
+    <div class="center mt-4">
       <router-link to="/Main" class="text-2xl text-emerald-800 block">
         برای ورود به سرچ کلیک کنید
       </router-link>
@@ -16,3 +16,8 @@ export default {
   name: "home-component",
 };
 </script>
+<style scoped>
+  .center{
+    @apply flex justify-center items-center;
+  }
+</style>
